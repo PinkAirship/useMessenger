@@ -46,8 +46,7 @@ function Message ({ message }) {
   const { removeMessage } = useMessenger()
   return (
     <div>
-      {message.message}
-      {message.status}
+      {message.message} |  {message.status}
       <input type="button" onClick={() => removeMessage(message.id)} value="Remove Message" />
     </div>
   )

@@ -16,6 +16,43 @@ yarn add @pinkairship/useMessenger
 ```
 
 ## Usage
+Wrap the tree you wish to add and remove messages with a MessagesProvider:
+
+```jsx
+function App () {
+  return (
+    <MessagesProvider>
+      // children here
+    </MessagesProvider>
+  )
+}
+```
+Then create a component that will hook into adding a message:
+
+```jsx
+function MakeMessage () {
+  const { addMessage } = useMessenger()
+  return (
+    <input type="button" onClick={() => addMessage(nanoid(), 'err')} value="Add Message" />
+  )
+}
+```
+
+Then create a component that will display the message and hook into removing the message:
+
+```jsx
+function Message ({ message }) {
+  const { removeMessage } = useMessenger()
+  return (
+    <div>
+      {message.message} |  {message.status}
+      <input type="button" onClick={() => removeMessage(message.id)} value="Remove Message" />
+    </div>
+  )
+}
+```
+
+Then put them altogether (full example below):
 
 ```jsx
 import React from 'react'
@@ -57,15 +94,18 @@ function Message ({ message }) {
   const { removeMessage } = useMessenger()
   return (
     <div>
-      {message.message}
-      {message.status}
+      {message.message} |  {message.status}
       <input type="button" onClick={() => removeMessage(message.id)} value="Remove Message" />
     </div>
   )
 }
 ```
 
-To add screen reader alerts (which you should - [read more here](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)) pass in a function that will provide a reference to the aria-live region.
+### Screen Reader Alerts
+
+To add screen reader alerts (which you should - [read more here](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)) pass in a function that accepts the message id, message, and optionally the status of the message (ie error).
+
+Also, to remove the message, pass in a `removeScreenReaderAlert` function that accepts the id of the function. You can use the id of the message to remove the alert when the message is removed.
 
 ```jsx
 //index.html
@@ -76,7 +116,8 @@ To add screen reader alerts (which you should - [read more here](https://develop
 export default function App () {
   return (
     <MessagesProvider
-      screenReaderAlert={() => document.getElementById('screenReaderAlert')}
+      screenReaderAlert={(id, message, status) => myScreenReaderAlertFunction(id, message, status)}
+      removeScreenReaderAlert={(id) => myScreenReaderAlertRemovalFunction(messageId)}
     >
       <div>
         <MakeMessage />
@@ -87,20 +128,7 @@ export default function App () {
 }
 ```
 
-You can also set the politeness level of an alert by providing a `politeLevel` attribute when adding a message (defaults to `polite`).
-
-```jsx
-function MakeMessage () {
-  const { addMessage } = useMessenger()
-  return (
-    <input
-      type="button"
-      onClick={() => addMessage(nanoid(), 'err', 'assertive')}
-      value="Add Message"
-    />
-  )
-}
-```
+** Note that you may have components that automatically hook into your screen reader alert when they are created, so be sure to not add a function to add and remove alerts for screen readers if this is the case.
 
 ## Development
 

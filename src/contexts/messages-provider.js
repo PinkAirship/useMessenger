@@ -7,23 +7,26 @@ export const MessageContext = React.createContext({
   removeMessage: () => {}
 });
 
-export function MessagesProvider({ children }) {
+export function MessagesProvider({
+  children,
+  screenReaderAlert = (id, message, status = '') => {},
+  removeScreenReaderAlert = (id) => {}
+}) {
   const [messages, setMessages] = useState({});
-  const [count, setCount] = useState(0)
 
   const removeMessage = (messageId) => {
     const newMessages = {...messages}
     delete newMessages[messageId]
     setMessages(newMessages);
-    setCount(count - 1)
+    removeScreenReaderAlert(messageId)
   }
 
   const addMessage = (message, status) => {
-    setCount(count + 1)
     const newMessages = {...messages}
     const id = nanoid()
     newMessages[id] = {id, message, status}
     setMessages(newMessages);
+    screenReaderAlert(id, message, status)
   }
 
   const contextValue = {
