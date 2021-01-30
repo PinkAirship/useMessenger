@@ -8,6 +8,7 @@ export default function App () {
     <MessagesProvider>
       <div>
         <MakeMessage />
+        <MakeDismissableMessage />
         <MessageDisplay />
       </div>
     </MessagesProvider>
@@ -27,6 +28,19 @@ function MakeMessage () {
   const { addMessage } = useMessenger()
   return (
     <input type="button" onClick={() => addMessage(nanoid(), 'err')} value="Add Message" />
+  )
+}
+
+function MakeDismissableMessage () {
+  const { addMessage, removeMessage } = useMessenger()
+
+  const dismissableAddMessage = (message) => {
+    const messageId = addMessage('my message')
+    // Will be removed in two seconds
+    setTimeout(() => removeMessage(messageId), 2000)
+  }
+  return (
+    <input type="button" onClick={() => dismissableAddMessage(nanoid())} value="Add Dismissable Message" />
   )
 }
 

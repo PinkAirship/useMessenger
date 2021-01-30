@@ -27,6 +27,7 @@ export function MessagesProvider({
     newMessages[id] = {id, message, status}
     setMessages(newMessages);
     screenReaderAlert(id, message, status)
+    return id
   }
 
   const contextValue = {

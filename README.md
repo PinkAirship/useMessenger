@@ -101,6 +101,35 @@ function Message ({ message }) {
 }
 ```
 
+### Dismissable Alerts
+
+If you want to use dismissable alerts, use the following function when creating an alert:
+
+```js
+(message) => {
+  const messageId = addMessage('my message')
+  // Will be removed in five seconds
+  setTimeout(() => removeMessage(messageId), 5000)
+}
+```
+
+Add this to your addMessage component:
+
+```jsx
+function MakeMessage () {
+  const { addMessage, removeMessage } = useMessenger()
+
+  const dismissableAddMessage = (message) => {
+    const messageId = addMessage('my message')
+    // Will be removed in five seconds
+    setTimeout(() => removeMessage(messageId), 5000)
+  }
+  return (
+    <input type="button" onClick={() => dismissableAddMessage(nanoid())} value="Add Message" />
+  )
+}
+```
+
 ### Screen Reader Alerts
 
 To add screen reader alerts (which you should - [read more here](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)) pass in a function that accepts the message id, message, and optionally the status of the message (ie error).
