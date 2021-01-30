@@ -47,7 +47,7 @@ function MessageDisplay () {
   return (
     <div>
       {
-        Object.values(messages).map(m => <Message message={m} key={m.id}/>)
+        Object.values(messages).map((m) => <Message message={m} key={m.id} />)
       }
     </div>
   )
@@ -101,3 +101,29 @@ function MakeMessage () {
   )
 }
 ```
+
+## Development
+
+To run a development environment:
+
+```
+npm run start
+```
+
+You can then navigate to `http://localhost:8080` and see the example app running. Using webpack serve, any changes you make to the `src/` files will automatically be reflected.
+
+### Testing
+
+Tests should be included in the `__test__` file. To help in writing tests, a wrapper
+function has been provided in `__tests__/index.js`. See `__tests__/index.js` for examples on how to write tests.
+#### Running Tests
+
+To run tests:
+
+```
+npm run test
+```
+
+## Troubleshooting
+
+1. If you install into another project locally (using `npm install <folder>`) be sure to follow the advice found here [https://stackoverflow.com/questions/56021112/react-hooks-in-react-library-giving-invalid-hook-call-error](https://stackoverflow.com/questions/56021112/react-hooks-in-react-library-giving-invalid-hook-call-error)
