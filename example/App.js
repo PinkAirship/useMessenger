@@ -5,7 +5,10 @@ import { nanoid } from 'nanoid'
 
 export default function App () {
   return (
-    <MessagesProvider>
+    <MessagesProvider
+      initialMessages={[{message: nanoid(), customStatus: 'mine', id: 'will be ignored'}]}
+      initialMessageTransform={m => ({message: m.message, status: m.customStatus, id: m.id})}
+    >
       <div>
         <MakeMessage />
         <MakeDismissableMessage />

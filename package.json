@@ -1,6 +1,6 @@
 {
   "name": "@pinkairship/use-messenger",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A react library that provides a context and hook to add and remove messages from your application.",
   "main": "dist/index.js",
   "scripts": {

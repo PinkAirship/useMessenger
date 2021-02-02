@@ -55,3 +55,20 @@ it('alerts screenReader on Remove Message', async () => {
   button.click()
   expect(removeScreenReaderAlert).toHaveBeenCalled()
 })
+
+it('renders messages provided', async () =>{
+  const { findByText } = renderComponent(<Messages />, {
+    initialMessages: ['message1', 'message2']
+  });
+  await findByText(/message1/);
+  await findByText(/message2/);
+})
+
+it('renders messages provided and does the provided transform', async () =>{
+  const { findByText } = renderComponent(<Messages />, {
+    initialMessages: [{customStatus: 'status1', message: 'message1'}],
+    initialMessageTransform: (m) => ({message: m.message, status: m.customStatus})
+  });
+  await findByText(/message1/);
+  await findByText(/status1/);
+})

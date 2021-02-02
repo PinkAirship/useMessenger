@@ -10,9 +10,19 @@ export const MessageContext = React.createContext({
 export function MessagesProvider({
   children,
   screenReaderAlert = (id, message, status = '') => {},
-  removeScreenReaderAlert = (id) => {}
+  removeScreenReaderAlert = (id) => {},
+  initialMessages = [],
+  initialMessageTransform = (message) => ({ message, status: ''})
 }) {
-  const [messages, setMessages] = useState({});
+  const startMessages = {}
+  initialMessages = initialMessages.forEach(
+    message => {
+      const id = nanoid()
+      startMessages[id] = {...initialMessageTransform(message), ...{id}}
+    }
+  )
+
+  const [messages, setMessages] = useState(startMessages);
 
   const removeMessage = (messageId) => {
     const newMessages = {...messages}

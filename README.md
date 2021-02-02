@@ -159,6 +159,41 @@ export default function App () {
 
 ** Note that you may have components that automatically hook into your screen reader alert when they are created, so be sure to not add a function to add and remove alerts for screen readers if this is the case.
 
+### Initial Messages
+
+Initial messages can be set to the MessagesProvider on initial mount.
+
+```jsx
+const intialMessages = ['message1', 'message2']
+
+function App () {
+  return (
+    <MessagesProvider initialMessages={intialMessages}>
+      ...
+    </MessagesProvider>
+  )
+}
+```
+
+`initialMessages` assumes that the messages being passed are an array of strings, but if they are not you can pass a transform function called `initialMessageTransform` that will format the messages into a way that MessagesProvider can understand. This format is `{message: string, status: string}`.
+
+
+```jsx
+const intialMessages = [{message: nanoid(), customStatus: 'mine', id: 'will be ignored'}]
+const transformer = m => ({message: m.message, status: m.customStatus, id: m.id})
+
+function App () {
+  return (
+    <MessagesProvider initialMessages={intialMessages} initialMessageTransform={transformer}>
+      ...
+    </MessagesProvider>
+  )
+}
+```
+
+Note that the id property will be overwritten by any transforms as it is used internally to track messages in state. If you have a message that has an id, transform it.
+
+** Note that messages set in this manner will not alert screen readers and it is up to the application to still alert screen readers of these messages.
 ## Development
 
 To run a development environment:
