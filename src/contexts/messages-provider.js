@@ -1,41 +1,42 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import { nanoid } from 'nanoid'
 
 export const MessageContext = React.createContext({
   messages: {},
   addMessage: () => {},
-  removeMessage: () => {}
-});
+  removeMessage: () => {},
+})
 
 export function MessagesProvider({
   children,
-  screenReaderAlert = (id, message, status = '') => {},
-  removeScreenReaderAlert = (id) => {},
+  screenReaderAlert = () => {},
+  removeScreenReaderAlert = () => {},
   initialMessages = [],
-  initialMessageTransform = (message) => ({ message, status: ''})
+  initialMessageTransform = (message) => ({ message, status: '' }),
 }) {
   const startMessages = {}
-  initialMessages = initialMessages.forEach(
-    message => {
-      const id = nanoid()
-      startMessages[id] = {...initialMessageTransform(message), ...{id}}
+  initialMessages.forEach((message) => {
+    const id = nanoid()
+    startMessages[id] = {
+      ...initialMessageTransform(message),
+      ...{ id },
     }
-  )
+  })
 
-  const [messages, setMessages] = useState(startMessages);
+  const [messages, setMessages] = useState(startMessages)
 
   const removeMessage = (messageId) => {
-    const newMessages = {...messages}
+    const newMessages = { ...messages }
     delete newMessages[messageId]
-    setMessages(newMessages);
+    setMessages(newMessages)
     removeScreenReaderAlert(messageId)
   }
 
   const addMessage = (message, status) => {
-    const newMessages = {...messages}
+    const newMessages = { ...messages }
     const id = nanoid()
-    newMessages[id] = {id, message, status}
-    setMessages(newMessages);
+    newMessages[id] = { id, message, status }
+    setMessages(newMessages)
     screenReaderAlert(id, message, status)
     return id
   }
@@ -43,12 +44,12 @@ export function MessagesProvider({
   const contextValue = {
     messages,
     addMessage: (message, status) => addMessage(message, status),
-    removeMessage: (messageId) => removeMessage(messageId)
-  };
+    removeMessage: (messageId) => removeMessage(messageId),
+  }
 
   return (
     <MessageContext.Provider value={contextValue}>
       {children}
     </MessageContext.Provider>
-  );
+  )
 }
