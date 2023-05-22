@@ -74,7 +74,9 @@ it('renders messages provided and does the provided transform', async () => {
     ],
     initialMessageTransform: (m) => ({
       message: m.message,
-      status: m.customStatus,
+      options: {
+        status: m.customStatus,
+      },
     }),
   })
   await findByText(/message1/)

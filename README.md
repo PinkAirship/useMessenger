@@ -45,7 +45,7 @@ function Message ({ message }) {
   const { removeMessage } = useMessenger()
   return (
     <div>
-      {message.message} |  {message.status}
+      {message.message} |  {message.options.status}
       <input type="button" onClick={() => removeMessage(message.id)} value="Remove Message" />
     </div>
   )
@@ -94,7 +94,7 @@ function Message ({ message }) {
   const { removeMessage } = useMessenger()
   return (
     <div>
-      {message.message} |  {message.status}
+      {message.message} |  {message.options.status}
       <input type="button" onClick={() => removeMessage(message.id)} value="Remove Message" />
     </div>
   )
@@ -132,7 +132,7 @@ function MakeMessage () {
 
 ### Screen Reader Alerts
 
-To add screen reader alerts (which you should - [read more here](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)) pass in a function that accepts the message id, message, and optionally the status of the message (ie error).
+To add screen reader alerts (which you should - [read more here](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)) pass in a function that accepts the message id, message, and the options of the message (i.e. 'status': 'error').
 
 Also, to remove the message, pass in a `removeScreenReaderAlert` function that accepts the id of the function. You can use the id of the message to remove the alert when the message is removed.
 
@@ -145,7 +145,7 @@ Also, to remove the message, pass in a `removeScreenReaderAlert` function that a
 export default function App () {
   return (
     <MessagesProvider
-      screenReaderAlert={(id, message, status) => myScreenReaderAlertFunction(id, message, status)}
+      screenReaderAlert={(id, message, options) => myScreenReaderAlertFunction(id, message, options)}
       removeScreenReaderAlert={(id) => myScreenReaderAlertRemovalFunction(messageId)}
     >
       <div>
@@ -175,12 +175,12 @@ function App () {
 }
 ```
 
-`initialMessages` assumes that the messages being passed are an array of strings, but if they are not you can pass a transform function called `initialMessageTransform` that will format the messages into a way that MessagesProvider can understand. This format is `{message: string, status: string}`.
+`initialMessages` assumes that the messages being passed are an array of strings, but if they are not you can pass a transform function called `initialMessageTransform` that will format the messages into a way that MessagesProvider can understand. This format is `{message: string, options: object}`.
 
 
 ```jsx
 const intialMessages = [{message: nanoid(), customStatus: 'mine', id: 'will be ignored'}]
-const transformer = m => ({message: m.message, status: m.customStatus, id: m.id})
+const transformer = m => ({message: m.message, options:{status: m.customStatus}, id: m.id})
 
 function App () {
   return (

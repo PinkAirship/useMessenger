@@ -12,7 +12,10 @@ export function MessagesProvider({
   screenReaderAlert = () => {},
   removeScreenReaderAlert = () => {},
   initialMessages = [],
-  initialMessageTransform = (message) => ({ message, status: '' }),
+  initialMessageTransform = (message) => ({
+    message,
+    options: { status: '' },
+  }),
 }) {
   const startMessages = {}
   initialMessages.forEach((message) => {
@@ -32,18 +35,21 @@ export function MessagesProvider({
     removeScreenReaderAlert(messageId)
   }
 
-  const addMessage = (message, status) => {
+  const addMessage = (message, options) => {
     const newMessages = { ...messages }
     const id = nanoid()
-    newMessages[id] = { id, message, status }
+    newMessages[id] = { id, message, options }
+    if (!options.status) {
+      options.status = ''
+    }
     setMessages(newMessages)
-    screenReaderAlert(id, message, status)
+    screenReaderAlert(id, message, options.status)
     return id
   }
 
   const contextValue = {
     messages,
-    addMessage: (message, status) => addMessage(message, status),
+    addMessage: (message, options) => addMessage(message, options),
     removeMessage: (messageId) => removeMessage(messageId),
   }
 
