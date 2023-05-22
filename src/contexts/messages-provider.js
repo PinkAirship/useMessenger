@@ -12,7 +12,10 @@ export function MessagesProvider({
   screenReaderAlert = () => {},
   removeScreenReaderAlert = () => {},
   initialMessages = [],
-  initialMessageTransform = (message) => ({ message, options: {} }),
+  initialMessageTransform = (message) => ({
+    message,
+    options: { status: '' },
+  }),
 }) {
   const startMessages = {}
   initialMessages.forEach((message) => {
@@ -20,9 +23,6 @@ export function MessagesProvider({
     startMessages[id] = {
       ...initialMessageTransform(message),
       ...{ id },
-      ...(options.status
-        ? { status: options.status }
-        : { status: '' }),
     }
   })
 
