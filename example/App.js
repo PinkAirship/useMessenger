@@ -42,7 +42,7 @@ function MakeMessage() {
   return (
     <input
       type="button"
-      onClick={() => addMessage(nanoid(), 'err')}
+      onClick={() => addMessage(nanoid(), { status: 'err' })}
       value="Add Message"
     />
   )
@@ -81,7 +81,7 @@ function Message({ message }) {
   const { removeMessage } = useMessenger()
   return (
     <div>
-      {message.message} | {message.status}
+      {message.message} | {message.options.status}
       <input
         type="button"
         onClick={() => removeMessage(message.id)}
